@@ -15,7 +15,7 @@ Define and call a function to create an IAM group named "admin" using the AWS CL
 Attach an AWS-managed administrative policy (e.g., "AdministratorAccess") to the "admin" group to grant administrative privileges.
 Iterate through the array of IAM user names and assign each user to the "admin" group using AWS CLI commands.
 
-## Provided Script
+## Updated Script
 ```
 #!/bin/bash
 
@@ -23,32 +23,107 @@ Iterate through the array of IAM user names and assign each user to the "admin" 
 # This script automates the creation of IAM users, groups, and permissions
 
 # Define IAM User Names Array
-IAM_USER_NAMES=()
+IAM_USER_NAMES=("devops_user1" "devops_user2" "devops_user3" "devops_user4" "devops_user5")
 
 # Function to create IAM users
-create_iam_users() {"\n    echo \"Starting IAM user creation process...\"\n    echo \"-------------------------------------\"\n    \n    echo \"---Write the loop to create the IAM users here---\"\n    \n    echo \"------------------------------------\"\n    echo \"IAM user creation process completed.\"\n    echo \"\"\n"}
+create_iam_users() {
+    echo "Starting IAM user creation process..."
+    echo "-------------------------------------"
+
+    for username in "${IAM_USER_NAMES[@]}"; do
+        echo "Creating IAM user: $username..."
+        aws iam create-user --user-name "$username" >/dev/null 2>&1
+        if [ $? -eq 0 ]; then
+            echo "Success: Created user $username"
+        else
+            echo "Notice: User $username may already exist or an error occurred."
+        fi
+    done
+
+    echo "------------------------------------"
+    echo "IAM user creation process completed."
+    echo ""
+}
 
 # Function to create admin group and attach policy
-create_admin_group() {"\n    echo \"Creating admin group and attaching policy...\"\n    echo \"--------------------------------------------\"\n    \n    # Check if group already exists\n    aws iam get-group --group-name \"admin\" >/dev/null 2>&1\n    echo \"---Write this part to create the admin group---\"\n    \n    # Attach AdministratorAccess policy\n    echo \"Attaching AdministratorAccess policy...\"\n    echo \"---Write the AWS CLI command to attach the policy here---\"\n        \n    if [ $? -eq 0 ]; then\n        echo \"Success: AdministratorAccess policy attached\"\n    else\n        echo \"Error: Failed to attach AdministratorAccess policy\"\n    fi\n    \n    echo \"----------------------------------\"\n    echo \"\"\n"}
+create_admin_group() {
+    echo "Creating admin group and attaching policy..."
+    echo "--------------------------------------------"
+
+    # Check if group already exists
+    aws iam get-group --group-name "admin" >/dev/null 2>&1
+    if [ $? -ne 0 ]; then
+        echo "Admin group not found. Creating..."
+        aws iam create-group --group-name "admin"
+    else
+        echo "Admin group already exists. Skipping creation."
+    fi
+
+    # Attach AdministratorAccess policy
+    echo "Attaching AdministratorAccess policy..."
+    aws iam attach-group-policy --group-name "admin" \
+        --policy-arn arn:aws:iam::aws:policy/AdministratorAccess
+
+    if [ $? -eq 0 ]; then
+        echo "Success: AdministratorAccess policy attached"
+    else
+        echo "Error: Failed to attach AdministratorAccess policy"
+    fi
+
+    echo "----------------------------------"
+    echo ""
+}
 
 # Function to add users to admin group
-add_users_to_admin_group() {"\n    echo \"Adding users to admin group...\"\n    echo \"------------------------------\"\n    \n    echo \"---Write the loop to handle users addition to the admin group here---\"\n    \n    echo \"----------------------------------------\"\n    echo \"User group assignment process completed.\"\n    echo \"\"\n"}
+add_users_to_admin_group() {
+    echo "Adding users to admin group..."
+    echo "------------------------------"
+
+    for username in "${IAM_USER_NAMES[@]}"; do
+        echo "Adding user $username to admin group..."
+        aws iam add-user-to-group --user-name "$username" --group-name "admin"
+        if [ $? -eq 0 ]; then
+            echo "Success: Added $username to admin group"
+        else
+            echo "Error: Could not add $username to admin group"
+        fi
+    done
+
+    echo "----------------------------------------"
+    echo "User group assignment process completed."
+    echo ""
+}
 
 # Main execution function
-main() {"\n    echo \"==================================\"\n    echo \" AWS IAM Management Script\"\n    echo \"==================================\"\n    echo \"\"\n    \n    # Verify AWS CLI is installed and configured\n    if ! command -v aws &> /dev/null; then\n        echo \"Error: AWS CLI is not installed. Please install and configure it first.\"\n        exit 1\n    fi\n    \n    # Execute the functions\n    create_iam_users\n    create_admin_group\n    add_users_to_admin_group\n    \n    echo \"==================================\"\n    echo \" AWS IAM Management Completed\"\n    echo \"==================================\"\n"}
+main() {
+    echo "=================================="
+    echo " AWS IAM Management Script"
+    echo "=================================="
+    echo ""
+
+    # Verify AWS CLI is installed and configured
+    if ! command -v aws &> /dev/null; then
+        echo "Error: AWS CLI is not installed. Please install and configure it first."
+        exit 1
+    fi
+
+    # Execute the functions
+    create_iam_users
+    create_admin_group
+    add_users_to_admin_group
+
+    echo "=================================="
+    echo " AWS IAM Management Completed"
+    echo "=================================="
+}
 
 # Execute main function
 main
 
 exit 0
+
+
 ```
 ## Pre-requisite
-* Ensure that you have already configured AWS CLI in your terminal and the configured AWS Account have the appropriate permissions to manage IAM resources.
-* Completion of Linux foundations with Shell Scripting mini projects
-
-## Project Deliverables
-
-Submit the following deliverables:
-
-* Comprehensive documentation detailing your entire thought process in developing the script.
-* Link to the extended script.
+* I ensured I have configured AWS CLI in my terminal and the configured AWS Account have the approriate permissions to manage IAM resources.
+* I have completed the Linux foundations with Shell Scripting mini projects
