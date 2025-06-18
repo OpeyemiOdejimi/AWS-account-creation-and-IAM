@@ -1,189 +1,219 @@
-# Introduction to Cloud Computing – Security & Identity Management (IAM)
+# AWS Identity and Access Management Mini project
 
-This mini project is designed to guide you through the intricacies of Amazon Web Services (AWS), specifically focusing on Identity and Access Management (IAM). Before diving into the specifics of IAM, it’s crucial to establish that a basic understanding of cloud computing principles is a prerequisite for this project. If you’re hearing about "Cloud" for the first time, it would mean that you have not followed the program so far, so it is highly recommended that you go back to the start of this program to learn about the cloud.
+We're going to learn about AWS Identity and Access Management (IAM), which helps control who can access what in Amazon Web Services. We'll cover things like users, roles, policies, and groups, and we'll also show you how to actually set them up to keep your AWS resources safe.
 
-As a recap, it involves delivering computing services over the internet, including servers, storage, databases, networking, software, analytics, and intelligence, to offer faster innovation, flexible resources, and economies of scale.
+But before we get into all that, let's make sure you understand the basics of cloud computing. If terms like "Cloud" sound new to you, it's a good idea to go back and review some earlier materials to get a solid grasp of what it's all about.
 
-In this project, we will be working with a hypothetical fintech startup named Zappy e-Bank. This fictitious company represents a typical startup venturing into the financial technology sector, aiming to leverage the cloud's power to innovate, scale, and deliver financial services. The scenario is set up to provide a realistic backdrop that will help you understand the application of AWS IAM in managing cloud resources securely and efficiently.
+## Project Goals :
 
-## The Importance of IAM for Zappy e-Bank
-For Zappy e-Bank, like any company dealing with financial services, security and compliance are paramount. The company must ensure that its data, including sensitive customer information, is securely managed and that access to resources is tightly controlled. AWS IAM plays a critical role in achieving these security objectives by allowing the company to define who is authenticated (signed in) and authorized (has permissions) to use resources.
+Understand AWS Identity and Access Management (IAM) principles and components.
+Learn to create and manage IAM policies for regulating access to AWS resources securely.
+Apply IAM concepts practically to control access within AWS environments.
+Explore best practices for IAM implementation and security in AWS.
+Learning Outcomes :
 
-**IAM will enable Zappy e-Bank to:**
-Create and manage AWS users and groups, to control access to AWS services and resources securely.
-Use IAM roles and policies to set more granular permissions for AWS services and external users or services that need to access Zappy e-Bank' AWS resources.
-Implement strong access controls, including multi-factor authentication (MFA), to enhance security.
-This project will walk you through setting up IAM for Zappy e-Bank, creating a secure environment that reflects real-world usage and challenges. Through this hands-on experience, you will learn the fundamentals of IAM, how to manage access to AWS resources, and best practices for securing your cloud environment.
+* Recognize IAM components like users, roles, policies, and groups.
+* Create and manage IAM policies to define permissions for users and roles.
+* Set up IAM users, groups, and roles to control access to AWS services.
+* Understand IAM best practices for maintaining security and managing access to AWS resources.
+* What is IAM?
+* IAM, or Identity and Access Management. Think of it as the gatekeeper for your AWS resources, its job is to decide who gets in and what they're allowed to do once they're inside.
 
-## Project Goals and Learning Outcomes
-By the end of this project, you will have:
+Imagine you have this big digital "house" full of all your AWS stuff—your data, your applications, the whole shebang. Now, you don't want just anyone wandering in and messing around with your things, right? That's where IAM steps in.
 
-Gained a solid understanding of AWS IAM, including users, groups, roles, and policies.
-Learned how to apply IAM concepts to secure a fintech startup’s cloud infrastructure.
-Developed practical skills in using the AWS Management Console to manage IAM.
-Understood the significance of secure access management and its impact on compliance and data security in the fintech industry.
-Project Setup
-Log in to the AWS Management Console: Use your administrator account to log in.
+It's like having your own VIP list for your digital world. IAM helps you keep your AWS resources safe and sound, making sure only the right people get in and that they're only allowed to do what you say they can. It's all about keeping your digital house in order and protecting your precious stuff from any unwanted guests.
 
-Navigate to the IAM Dashboard: Here, you'll manage users, groups, roles, and policies.
+Note- AWS resources are the various services and tools provided by Amazon Web Services (AWS) that users can utilize to build and manage their applications and infrastructure in the cloud.
 
-## Excercises:
-### Creating IAM Users
-An IAM user is a unique identity within an AWS account that represents a person or service, granting specific permissions to access and interact with AWS resources under controlled and customizable security policies.
+## What is IAM user?
+IAM users are like individual accounts for different people or entities within your AWS environment.
 
-Imagine that you have a big, secure building (AWS account) that you own and control. When you first get the keys to this building, you're given a master key (root user) that can open every door, access every floor, and make changes to the building's structure itself.
+For example, if you have a team working on a project, you can create separate IAM users for each team member. Each IAM user would have their own unique username and password, allowing them to access the AWS resources they need for their work.
 
-This master key is powerful, allowing you to do anything from adding new rooms (services) to changing the locks (security settings). However, because this key can do so much, it's also very risky to use it for daily tasks—like if you lost it, someone could do anything they want with your building.
+IAM users help you manage and control access to your AWS resources securely, ensuring that each user only has access to the resources they need to perform their tasks.
 
-Now, imagine you have specific tasks that need to be done in the building, like cleaning, maintenance, or security checks. You wouldn't give out your master key to every person who needs to do those jobs. Instead, you create specific keys (IAM users) that can only open certain doors or access certain floors. These keys are less powerful but much safer to use for everyday tasks. They ensure that the people holding them can only access the parts of the building they need to do their jobs and nothing more.
+## What is IAM Role?
+An IAM role defines what someone or something (like an application or service) can do within your AWS account. Each role has a set of permissions that determine which actions it can perform and which AWS resources it can access.
 
-Let's set up IAM users for a backend developer, John, and a data analyst, Mary, by first determining their specific access needs.
+For example, you might have an "admin" role that gives full access to all resources, or a "developer" role that only allows access to certain services for building applications.
 
-As a backend developer, John requires access to servers (EC2) to run his code, necessitating an IAM user with policies granting EC2 access.
+Or if we take another example, imagine you have a visitor who needs temporary access to your house to fix something. Instead of giving them a permanent key (IAM user), you give them a temporary key (IAM role) that only works for a limited time and grants access to specific rooms (AWS resources).
 
-As a data analyst, Mary needs access to data storage (AWS S3 service), so her IAM user should have policies enabling S3 access.
+IAM roles are flexible and can be assumed by users, services, or applications as needed. They are commonly used for tasks such as granting permissions to AWS services, allowing cross-account access, or providing temporary access to external users. IAM roles enhance security and efficiency by providing controlled access to AWS resources without the need for permanent credentials.
 
-Considering Zappy e-Bank's plan to expand its team with 10 more developers and 5 additional data analysts in the coming months, it's inefficient to individually create similar policies for each new member. A more streamlined approach involves:
+## What is IAM Policy?
+An IAM policy is a set of rules that define what actions a role can take. These rules specify the permissions granted to the role. Think of a policy as a rulebook for the role. It outlines which actions are allowed and which are not, helping to ensure secure and controlled access to your AWS resources.
 
-## Crafting a single policy tailored to each role's access requirements.
-Associating this policy with a group specifically designed for that role.
-Adding all engineers or analysts to their respective groups, simplifying the management of permissions and ensuring consistent access across the team.
-Create policy for the Development team
-In the IAM console, click on policies
+For example, the rulebook might say that the "admin" key (IAM role or user) can open any door and perform any action within the house (AWS resources), while the "viewer" key (IAM role or user) can only open certain doors and look around, but not make any changes.
 
-Alt text
+IAM policies define the permissions granted to IAM roles and users, specifying which AWS resources they can access and what actions they can take. They are essential for maintaining security and controlling access to AWS resources, ensuring that only authorized actions are performed by users and roles within your AWS account.
 
-Click on create policy
+## What is IAM group?
+IAM Groups are like collections of IAM users. Instead of managing permissions for each user individually, you can organize users into groups based on their roles or responsibilities.
 
-Alt text
+You can think IAM Groups as these neat little collections of users with similar roles or responsibilities. It's like putting everyone into teams based on their tasks. So, you might have a group for developers, another for administrators, and so on. So instead of setting permissions for each person one by one, you set them up for the whole group at once.
 
-In the select a service section, search for ec2
+For example, let's say you have a development team working on a project. Instead of assigning permissions to each developer one by one, you can create an IAM Group called "Developers" and add all the developers to that group. Then, you assign permissions to the group as a whole. So, if you want all developers to have access to the same resources, you only need to set it up once for the group.
 
-Alt text
+**Best Practices:**
+* Give only the permissions needed: Don't give more access than necessary.
+* Use roles instead of users: Roles are safer and can be used when needed.
+* Review roles regularly: Remove unused roles to keep things tidy and secure.
+* Add extra security with MFA: Use Multi-Factor Authentication for extra protection.
+* Use ready-made policies: They're safer and easier to use.
+* Keep policies simple: Make separate policies for different tasks.
+* Keep track of changes: Keep a record of who changes what.
+* Test policies before using them: Make sure they work the way you want them to before applying them to real stuff.
+* Use descriptive names: Choose clear and descriptive names for IAM groups to facilitate understanding and management.
+* Enforce strong password policies: Encourage users to create strong passwords and implement expiration and complexity requirements.
 
-For simplicity sake, select the "All EC2 actions" checkbox
+> Note- (difference between users and roles) In AWS, users are like individual people with their own set of keys to access resources. These keys are permanent and tied to specific individuals. It's similar to having your own key to the front door of your house—it's always yours.
 
-Alt text
+On the other hand, roles in AWS are more like special keys that can be used by different people or even programs. These keys provide temporary access and can be used by different users as needed. Roles are like master keys that can be used by anyone who needs access to certain things temporarily. So, while users are tied to specific individuals, roles are more flexible and can be shared among different users for specific tasks.
 
-Also, make sure to select "All" in the Resources section
+For MFA you can check Multi-Factor Authentication (MFA) for IAM
 
-Alt text
+Hope you have understood all about IAM. Now come to the practical part.
 
-Click Next
+A growth marketing consultancy company called GatoGrowFast.com wants to give some access to their employee Eric, Jack and Ade to the Aws resources. Let’s see how it is being setup.
 
-Provide the name developers and description for the policy.Alt text
+We’ll do it in Two parts. In the first part of the practical, we'll create a policy granting full access to EC2. Then, we'll create a user named Eric and attach that policy to him.
 
-Click on Create Policy
+In the second part, we'll create a group and add two more users, Jack and Ade, to that group. Afterward, we'll create a policy for granting full access to EC2 and S3, and attach it to the group.
 
-Notice that after creating the policy, if you search for "developer" in the search box, you will notice that a number of policies are returned. This highlights the presence of both AWS managed and customer managed policies. AWS managed policies are predefined by AWS and provide permissions for many common use cases, allowing for quick and broad access management across AWS services without the need for custom policy creation like we just did. In contrast, customer managed policies are created and fully controlled by you, allowing for more tailored, specific access controls that can be finely tuned to your organization's requirements.
-
-Alt text
-
-### Create policy for the Data Analyst team
-Repeat the process above for the Data Analysts team, but instead of EC2, search for S3. Also name the policy analyst instead of developers. You can give it any description of your choice.
-
-### Create Group for the Development team
-In the IAM console navigation, select User group and in the top right click Create group
-Alt text
-
-Provide an a name for the group
-Alt text
-
-Attach the developer policy we created earlier to the group. This will allow any user in the Development-Team group to have access to EC2 instances alone
-Alt text
-
-You have successfully created a group and attached a permission policy for any user added to the group to have access to the EC2 instance only. Recall that users in this group will be backend developers only.
-Alt text
-
-### Create Group for the Data Analysts team
-Repeat the process above for the Data Analysts team.
-
-i. The Group name should be Analyst-Team
-
-ii. Instead of attaching developers policy, attach analyst policy.
-
-Recall that you only allowed S3 access for this policy. So any user in this group will have access to S3 Service. In our case, our users will be the data analysts.
-
-### Creating IAM User for John
-
-Let's recall that John is a backend developer, therefore he need to be added as a user to the Development-Team group
-
-Navigate to the IAM dashboard, select "Users" and then click "Create user".
+## Part-1
+Navigate to the AWS Management Console.
+a) use the search bar to locate the Identity and Access Management (IAM) service.
 
 Alt text
 
-Review the highlights in the screenshot
+Now, on the IAM dashboard, navigate to the left sidebar and click on "Policies."
+a) From there, search for "EC2" and select "AmazonEC2FullAccess" from the list of policies.
 
-Provide the name of the user. In this case "John"
-Ensure that the user can access the AWS Management Console. If this is not selected, the user will not be able to login from the web browser.Alt text
-Permissions: Add the John to the development team group.Alt text
-
-Click on Create user
+b) Proceed by clicking on "Create policy" to initiate the policy creation process.
 
 Alt text
 
-Download the login credentials for John
+Now, select all EC2 actions.
 Alt text
 
-### Creating IAM User for Mary
+Tick "All resources" and click "Next."
+Alt text
 
-Repeat the same step for Mary. But recall that Mary is a Data analyst, which means she need to be added as a user to the Analyst-Team group
+Now click on create policy
+Alt text
 
-Testing and Validation
-Testing John's Access
+This is the policy we have created.
 
-Login as John: Use the credentials provided to John to log into the AWS Management Console. This simulates John's user experience and ensures he has the correct access.
+Alt text
 
-Access EC2 Dashboard: Navigate to the EC2 dashboard within the AWS Management Console. John should be able to view, launch, and manage EC2 instances as his role requires access to servers for deploying and managing backend applications.
+Now, proceed to the "Users" section, and select the option to "Create User."
+Alt text
 
-Perform EC2 Actions: Attempt to create a new EC2 instance or modify an existing one to confirm that John has the necessary permissions. If John can successfully perform these actions, it indicates his IAM user has been correctly set up with the appropriate policies for a backend developer.
+### Enter the desired username for the user.
+a) Then select the option "Provide user access to the AWS Management Console" if access to the web-based console interface is required.
 
-Testing Mary's Access
+b) Proceed to set up a password for the user.
 
-Login as Mary: Use the credentials provided to Mary to log into the AWS Management Console. This ensures that Mary's user experience is as expected and that she has the correct access.
+c) check the box "Users must create a new password at next sign-in" if allowing users to change their password upon first sign-in is preferred.
 
-Access S3 Dashboard: Navigate to the S3 dashboard within the AWS Management Console. Mary should be able to view, create, and manage S3 buckets as her role requires access to data storage for analyzing and managing data.
+Alt text
 
-Perform S3 Actions: Try to create a new S3 bucket or upload data to an existing bucket to verify that Mary has the necessary permissions. Successful execution of these tasks will confirm that Mary's IAM user has been properly set up with the appropriate policies for a data analyst.
+Select "Attach policy directly" and navigate to "Filter customer managed policies."
+a) Choose the policy you created named "policy_for_eric."
 
-Validating Group Policies
+b) Then proceed by clicking "Next."
 
-For both users, ensure that their access is confined to their role-specific resources (EC2 for John and S3 for Mary) and that they cannot access other AWS services beyond what their group policies permit. This validation ensures adherence to the principle of least privilege, enhancing security by limiting access to only what is necessary for each user's role.
+Alt text
 
-Implement Multi-Factor Authentication (MFA)
-Now that you have created a new users. Let's create Multi-Factor Authentication for John. But before we to that, what is MFA ?
+> Note- Aws policies –
+Managed Policies: Made by AWS, used by many.
+Customer Managed Policies: You make and manage them.
+Inline Policies: Made for one specific thing.
+For further details, please refer to Policies and permissions in IAM in IAM documentation.
 
-Multi-Factor Authentication (MFA) is a security feature that adds an extra layer of protection to your AWS account and resources. With MFA enabled, users are required to provide two or more forms of authentication before they can access AWS resources.
+Next, click on "Create User."
+Alt text
 
-John, the backend developer, logs into the AWS Management Console to access EC2 instances for deploying and testing his code. However, to further secure his access, Zappy e-Bank requires John to use MFA in addition to his regular username and password.
+Ensure to save these details securely for future reference.
+a) Click on “Return to user list”
 
-When John attempts to log in, after providing his username and password, AWS prompts him to enter a one-time code generated by an MFA device.
+Alt text
 
-Setting Up MFA for John
-CLick on User and then click on john. It is assumed we already created a user account for johnAlt text
+Eric's user has been successfully created, and the policy granting him full access to EC2 has been attached.
 
-Click on enable MFA as shown in the image belowAlt text
+## Now let’s come to Part-2
+On the "User Groups" section, enter a name for the group.
+a) click on "Create User Group."
 
-Enter a device name for john MFA and select authenticator appAlt text
+b) Then, proceed to the "Users" section.
 
-Note: You should install authenticator app like Google authenticator or microsoft authenticator on your mobile device if you don't have it installed.
+Alt text
 
-Click on Next
+Alt text
 
-Open your Google authenticator or microsoft authenticator application on your mobile device to scan the QR Code, then you can fill in the 2 consecutive codes as shown in the image belowAlt text
+This is the user you've created.
 
-By completing step 1-5, MFA will be enabled for johnAlt text
+c) Now, let's proceed to the "Users" section.
 
-### Setting Up MFA for Mary
-Repeat the same step for Mary
+Alt text
 
-## Project reflection
-Explain the Role of IAM in AWS: Describe the purpose of Identity and Access Management (IAM) in Amazon Web Services and how it contributes to the security and efficient management of cloud resources.
+Now, let's create a user named Jack.
+Alt text
 
-Differentiate Between IAM Users and Groups: Discuss the differences between IAM users and IAM groups within the context of AWS. Provide examples of when you would create an IAM user versus when you would organize users into groups.
+In the "Permissions" options, select "Add user to group."
+a) Then, in the "User groups" section,
 
-Describe the Process of Creating IAM Policies: Explain the steps involved in creating a custom IAM policy for a specific role within an organization. Include details on selecting permissions and attaching the policy to users or groups.
+b) choose the group you created named "development-team,".
 
-Explain the Significance of the Principle of Least Privilege: Describe what the principle of least privilege means in the context of IAM and AWS, and why it is important for maintaining security in cloud environments.
+c) click "Next."
 
-Reflect on the Scenario with John and Mary: Based on the hands-on project setup for John (backend developer) and Mary (data analyst), outline the specific IAM configurations (users, groups, policies) created for each role. Discuss how these configurations align with their job functions and the principle of least privilege.
+Alt text
+
+Now, click on create user
+Alt text
+
+You need to repeat the same process for user Ade. Create user Ade and add him to the user group "Development-team."
+
+Alt text
+
+Alt text
+
+Alt text
+
+Navigate to the "Policies" section and click on "Create Policy" to begin crafting a new policy.
+Alt text
+
+Choose the two services, EC2 and S3, from the available options.
+Alt text
+
+Alt text
+
+Enter the desired policy name and proceed to click on the "Create policy" button.
+Alt text
+
+Navigate to the "Users group" section and select the "Development-team" group.
+Alt text
+
+Proceed to the "Permissions" section and add the necessary permissions.
+Alt text
+
+Click on attach policy
+Alt text
+
+Select "Customer Managed Policy" as the policy type.
+a) Then choose the "development-policy" you created.
+
+b) click "Attach Policy."
+
+Alt text
+
+The policy is now attached to the group, granting full permissions to EC2 and S3 for the group's users.
+
+Alt text
+
+## Project reflection:
+Understanding IAM: IAM serves as the security foundation for AWS resources, controlling access and permissions.
+Security Importance: IAM ensures data protection, compliance, and prevents unauthorized access.
+Policy Creation: Participants learned to craft IAM policies to regulate resource access effectively.
+Practical Application: Hands-on exercises equipped participants to set up IAM users, groups, and roles, enhancing their real-world IAM implementation skills.
