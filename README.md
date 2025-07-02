@@ -127,6 +127,3 @@ exit 0
 ## Pre-requisite
 * I ensured I have configured AWS CLI in my terminal and the configured AWS Account have the approriate permissions to manage IAM resources.
 * I have completed the Linux foundations with Shell Scripting mini projects
-
-  *****AKIAYGV5KAD24ZT5EHFX*******
-  ******YsElhuMJ/IZT6aG7tkupPSm/UidYTRscsIw2ZhDx*****
